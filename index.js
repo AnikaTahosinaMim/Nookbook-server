@@ -263,6 +263,7 @@ async function run() {
       "Pinged your deployment. You successfully connected to MongoDB!",
     );
   } finally {
+	// finally end
   }
 }
 run().catch(console.dir);
