@@ -34,7 +34,6 @@ const longer = async (req, res, next) => {
   try {
     const { payload } = await jwtVerify(token, JWKS);
 
-    // console.log('PAYLOAD:', payload)
 
     req.user = payload;
 
@@ -48,7 +47,6 @@ const longer = async (req, res, next) => {
 
 async function run() {
   try {
-    // await client.connect();
 
     const db = client.db("studyNook");
     const bookingCollection = db.collection("nook");
@@ -56,7 +54,6 @@ async function run() {
     // crud add data
     app.post("/room", async (req, res) => {
       const rooms = await req.body;
-      // console.log(rooms)
       const result = await bookingCollection.insertOne(rooms);
       res.json(result);
     });
@@ -92,7 +89,6 @@ async function run() {
           ];
         }
 
-        // console.log('FILTER:', filter)
 
         const result = await bookingCollection.find(filter).toArray();
 
