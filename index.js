@@ -64,42 +64,42 @@ async function run() {
 
     // room page data
     app.get("/booking", async (req, res) => {
-      try {
-        const { search, amenities, startTime, endTime } = req.query;
+  try {
+    const { search, amenities, startTime, endTime } = req.query;
 
-        let filter = {};
+    let filter = {};
 
-        if (search) {
-          filter.roomName = {
-            $regex: search,
-            $options: "i",
-          };
-        }
+    // Search
+    if (search) {
+      filter.roomName = {
+        $regex: search,
+        $options: "i",
+      };
+    }
 
-        if (amenities) {
-          filter.amenities = { $in: amenities.split(",") };
-        }
+    // Amenities
+    if (amenities) {
+      filter.amenities = { $in: [amenities] };
+    }
 
-        if (startTime && endTime) {
-          filter.$or = [
-            {
-              "booking.startTime": { $gte: startTime },
-              "booking.endTime": { $lte: endTime },
-            },
-          ];
-        }
+    // Time Filter
+    if (startTime && endTime) {
+      filter["booking.startTime"] = { $lte: startTime };
+      filter["booking.endTime"] = { $gte: endTime };
+    }
 
+    console.log(filter);
 
-        const result = await bookingCollection.find(filter).toArray();
+    const result = await bookingCollection.find(filter).toArray();
 
-        res.send(result);
-      } catch (error) {
-        res.status(500).send({
-          message: "Failed to fetch bookings",
-          error: error.message,
-        });
-      }
+    res.send(result);
+  } catch (error) {
+    res.status(500).send({
+      message: "Failed to fetch bookings",
+      error: error.message,
     });
+  }
+});
 
     // homepage 4 data
     app.get("/featured", async (req, res) => {
