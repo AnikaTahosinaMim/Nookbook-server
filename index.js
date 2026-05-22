@@ -65,14 +65,11 @@ async function run() {
     });
 
     // room page data
-    app.get("/booking", async (req, res) => {
+       app.get("/booking", async (req, res) => {
       try {
-        const { search, amenities, minPrice, maxPrice } = req.query;
+        const { search, amenities, startTime, endTime } = req.query;
 
-        let filter = {
-          ...(minPrice && { $gte: Number(minPrice) }),
-          ...(maxPrice && { $lte: Number(maxPrice) }),
-        };
+        let filter = {};
 
         if (search) {
           filter.roomName = {
@@ -85,11 +82,13 @@ async function run() {
           filter.amenities = { $in: amenities.split(",") };
         }
 
-        if (minPrice || maxPrice) {
-          filter.pricePerHour = {
-            ...(minPrice && { $gte: Number(minPrice) }),
-            ...(maxPrice && { $lte: Number(maxPrice) }),
-          };
+        if (startTime && endTime) {
+          filter.$or = [
+            {
+              "booking.startTime": { $gte: startTime },
+              "booking.endTime": { $lte: endTime },
+            },
+          ];
         }
 
         console.log("FILTER:", filter);
@@ -104,6 +103,7 @@ async function run() {
         });
       }
     });
+
 
     // homepage 4 data
     app.get("/featured", async (req, res) => {
