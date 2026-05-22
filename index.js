@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const { jwtVerify, createRemoteJWKSet } = require("jose-cjs");
-// serside
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -49,6 +48,8 @@ const longer = async (req, res, next) => {
 
 async function run() {
   try {
+    // await client.connect();
+
     const db = client.db("studyNook");
     const bookingCollection = db.collection("nook");
     const myBookingCollection = db.collection("my-bookings");
@@ -65,7 +66,7 @@ async function run() {
     });
 
     // room page data
-       app.get("/booking", async (req, res) => {
+    app.get("/booking", async (req, res) => {
       try {
         const { search, amenities, startTime, endTime } = req.query;
 
@@ -91,7 +92,7 @@ async function run() {
           ];
         }
 
-        console.log("FILTER:", filter);
+        // console.log('FILTER:', filter)
 
         const result = await bookingCollection.find(filter).toArray();
 
@@ -103,7 +104,6 @@ async function run() {
         });
       }
     });
-
 
     // homepage 4 data
     app.get("/featured", async (req, res) => {
