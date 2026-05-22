@@ -49,7 +49,6 @@ const longer = async (req, res, next) => {
 
 async function run() {
 	try {
-		// await client.connect();
 
 		const db = client.db('studyNook')
 		const bookingCollection = db.collection('nook')
@@ -93,7 +92,6 @@ async function run() {
 					]
 				}
 
-				// console.log('FILTER:', filter)
 
 				const result = await bookingCollection.find(filter).toArray()
 
